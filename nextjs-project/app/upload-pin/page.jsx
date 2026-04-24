@@ -51,7 +51,7 @@ const UploadPin = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("tags", tags);
-    formData.append("user", session.user.email);
+    formData.append("user", session.user.id);
 
     try {
       setLoading(true);
