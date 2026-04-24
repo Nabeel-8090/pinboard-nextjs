@@ -86,7 +86,7 @@ export default function ProfilePage() {
                   {/* OVERLAY */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                      <div className="w-full py-2.5 bg-blue-600/90 backdrop-blur-md text-white rounded-xl text-xs font-bold uppercase tracking-widest text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                        View Artwork
+                        View Pin
                      </div>
                   </div>
                 </div>
