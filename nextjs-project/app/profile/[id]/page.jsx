@@ -65,7 +65,7 @@ export default function ProfilePage() {
         ) : pins.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 rounded-3xl border-2 border-dashed border-slate-800 bg-slate-900/20">
             <p className="text-slate-500 text-lg">No pins found in this collection.</p>
-            <Link href="/create" className="mt-4 text-blue-400 hover:underline">Create your first pin</Link>
+            <Link href="/upload-pin" className="mt-4 text-blue-400 hover:underline">Create your first pin</Link>
           </div>
         ) : (
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
