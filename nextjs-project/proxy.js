@@ -10,5 +10,10 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/", "/upload-pin", "/pin/:path*"],
+  matcher: [
+    "/",
+    "/upload-pin",
+    "/pin/:path*",
+    "/profile/:path*",
+  ],
 };
