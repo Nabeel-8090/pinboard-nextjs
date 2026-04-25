@@ -21,34 +21,25 @@ const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: {
-          label: "Username",
-          type: "text",
-          placeholder: "Enter your username"
-        },
-        password: {
-          label: "Password",
-          type: "password"
-        }
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
       },
 
       async authorize(credentials) {
         await connectToDB();
 
-        const user = await User.findOne({ username: credentials.username });
-        if (!user) {
-          console.log("User not found");
-          return null;
-        }
+        const user = await User.findOne({
+          username: credentials.username,
+        });
+
+        if (!user) return null;
 
         const isPasswordMatched = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
-        if (!isPasswordMatched) {
-          return null;
-        }
+        if (!isPasswordMatched) return null;
 
         return {
           id: user._id.toString(),
@@ -65,6 +56,28 @@ const authOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
