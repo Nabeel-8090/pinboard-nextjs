@@ -1,77 +1,48 @@
-import connectToDB from "@/libs/mongodb";
-import Pin from "@/models/pin";
+import prisma from "@/libs/prisma";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function POST(request, { params }) {
   try {
-    await connectToDB();
-
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
     if (!token) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized access",
-        },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 401 });
     }
 
     const { id } = await params;
 
-    const pin = await Pin.findById(id);
+    const pin = await prisma.pin.findUnique({
+      where: { id },
+      include: { likes: true }
+    });
 
     if (!pin) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Pin not found",
-        },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Pin not found" }, { status: 404 });
     }
 
-    const userLikedIndex = pin.likes.findIndex(
-      (like) => like.user === token.name
-    );
+    const existingLike = pin.likes.find((like) => like.userId === token.name);
 
-    if (userLikedIndex > -1) {
+    if (existingLike) {
       // UNLIKE
-      pin.likes.splice(userLikedIndex, 1);
-      await pin.save();
-
-      return NextResponse.json({
-        success: true,
-        message: "Unliked successfully",
+      await prisma.like.delete({
+        where: { id: existingLike.id }
       });
+      return NextResponse.json({ success: true, message: "Unliked successfully" });
     } else {
       // LIKE
-      pin.likes.push({
-        user: token.name,
+      await prisma.like.create({
+        data: {
+          userId: token.name,
+          pinId: id,
+        }
       });
-
-      await pin.save();
-
-      return NextResponse.json(
-        {
-          success: true,
-          message: "Liked successfully",
-        },
-        { status: 201 }
-      );
+      return NextResponse.json({ success: true, message: "Liked successfully" }, { status: 201 });
     }
   } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: error.message,
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

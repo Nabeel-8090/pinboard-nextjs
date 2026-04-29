@@ -1,12 +1,9 @@
 import cloudinary from "@/libs/cloudinary";
-import connectToDB from "@/libs/mongodb";
-import User from "@/models/user";
+import prisma from "@/libs/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
 export async function POST(request) {
-  await connectToDB();
-
   const formData = await request.formData();
   const image = formData.get("image");
   const username = formData.get("username");
@@ -35,11 +32,13 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-      image: uploadedResponse.secure_url,
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        image: uploadedResponse.secure_url,
+      },
     });
 
     return NextResponse.json(
@@ -57,4 +56,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-}
+}

@@ -2,8 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import connectToDB from "@/libs/mongodb";
-import User from "@/models/user";
+import prisma from "@/libs/prisma";
 import bcrypt from "bcrypt";
 
 const authOptions = {
@@ -26,10 +25,8 @@ const authOptions = {
       },
 
       async authorize(credentials) {
-        await connectToDB();
-
-        const user = await User.findOne({
-          username: credentials.username,
+        const user = await prisma.user.findFirst({
+          where: { username: credentials.username },
         });
 
         if (!user) return null;
@@ -42,8 +39,8 @@ const authOptions = {
         if (!isPasswordMatched) return null;
 
         return {
-          id: user._id.toString(),
-          name: user.name,
+          id: user.id,
+          name: user.username,
           email: user.email,
           image: user.image,
         };
@@ -58,9 +55,28 @@ const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
+    async jwt({ token, user, account }) {
+      // On initial sign-in, user object is available
+      if (user && account) {
+        if (account.provider === "google" || account.provider === "github") {
+          // Upsert the OAuth user into PostgreSQL so we have a real DB id
+          const dbUser = await prisma.user.upsert({
+            where: { email: user.email },
+            update: {
+              username: user.name,
+              image: user.image,
+            },
+            create: {
+              email: user.email,
+              username: user.name,
+              image: user.image,
+            },
+          });
+          token.id = dbUser.id;
+        } else {
+          // Credentials — id is already the PostgreSQL UUID
+          token.id = user.id;
+        }
         token.name = user.name;
         token.email = user.email;
         token.picture = user.image;

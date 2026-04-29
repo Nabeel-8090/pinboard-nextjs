@@ -1,12 +1,22 @@
 import cloudinary from "@/libs/cloudinary";
-import connectToDB from "@/libs/mongodb";
+import prisma from "@/libs/prisma";
 import { NextResponse } from "next/server";
-import Pin from "@/models/pin";
+
+const mapPin = (pin) => ({
+  _id: pin.id,
+  user: pin.userId,
+  title: pin.title,
+  description: pin.description,
+  tags: pin.tags,
+  image: { url: pin.imageUrl },
+  likes: pin.likes ? pin.likes.map(l => ({ user: l.userId })) : [],
+  comments: pin.comments ? pin.comments.map(c => ({ user: c.userId, profileImage: c.profileImage, comment: c.comment, commentedOn: c.commentedOn })) : [],
+  createdAt: pin.createdAt,
+  updatedAt: pin.updatedAt,
+});
 
 export const POST = async (req) => {
   try {
-    await connectToDB();
-
     const formData = await req.formData();
 
     const image = formData.get("image");
@@ -50,18 +60,22 @@ export const POST = async (req) => {
         .end(buffer);
     });
 
-    const pin = await Pin.create({
-      user,
-      title,
-      description,
-      tags,
-      image: {
-        url: uploadedResponse.secure_url,
+    const pin = await prisma.pin.create({
+      data: {
+        userId: user,
+        title,
+        description,
+        tags,
+        imageUrl: uploadedResponse.secure_url,
       },
+      include: {
+        likes: true,
+        comments: true,
+      }
     });
 
     return NextResponse.json(
-      { success: true, pin },
+      { success: true, pin: mapPin(pin) },
       { status: 201 }
     );
   } catch (error) {
@@ -75,28 +89,51 @@ export const POST = async (req) => {
 
 export const GET = async (req) => {
   try {
-    await connectToDB();
-
     const search = req.nextUrl.searchParams.get("search");
 
     let pins;
 
     if (search) {
+      pins = await prisma.pin.findMany({
+        where: {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        },
+        include: {
+          likes: true,
+          comments: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      
+      // Filter pins that might match tags (since Prisma has doesn't support case-insensitive contains easily for arrays)
       const searchRegex = new RegExp(search, "i");
-
-      pins = await Pin.find({
-        $or: [
-          { title: { $regex: searchRegex } },
-          { description: { $regex: searchRegex } },
-          { tags: { $in: [searchRegex] } },
-        ],
-      }).sort({ createdAt: -1 });
+      const extraPins = await prisma.pin.findMany({
+        include: { likes: true, comments: true },
+        orderBy: { createdAt: "desc" }
+      });
+      
+      const tagMatched = extraPins.filter(p => p.tags.some(t => searchRegex.test(t)) && !pins.find(existing => existing.id === p.id));
+      pins = [...pins, ...tagMatched];
+      
+      // Re-sort
+      pins.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
     } else {
-      pins = await Pin.find().sort({ createdAt: -1 });
+      pins = await prisma.pin.findMany({
+        include: {
+          likes: true,
+          comments: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
     }
 
-    return NextResponse.json({ pins }, { status: 200 });
+    return NextResponse.json({ pins: pins.map(mapPin) }, { status: 200 });
   } catch (error) {
+    console.error("Fetch Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch pins" },
       { status: 500 }
