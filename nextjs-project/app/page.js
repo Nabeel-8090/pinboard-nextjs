@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-export default function Home() {
+function HomeContent() {
   const { data: session } = useSession();
   const [pins, setPins] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,5 +101,13 @@ export default function Home() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-[70vh]"><ClipLoader color="#3b82f6" size={60} /></div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
