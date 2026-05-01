@@ -10,7 +10,7 @@ const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const [query, setQuery] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,18 +44,18 @@ const Navbar = () => {
   return (
     <nav className='sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm shadow-sm px-4 md:px-8 py-2'>
       <div className='flex items-center justify-between container mx-auto gap-4'>
-        
+
         {/* LEFT */}
         <div className='flex items-center gap-2 md:gap-6'>
           <Link href="/" className="flex-shrink-0">
-            <img src="/logoo.jpg" alt="Logo" className='w-17 h-15'/>
+            <img src="/logoo.jpg" alt="Logo" className='w-17 h-15' />
           </Link>
 
           <div className='hidden md:flex items-center gap-1'>
             {navLinks.map((link) => (
-              <Link 
+              <Link
                 key={link.href}
-                href={link.href} 
+                href={link.href}
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
                   ${pathname === link.href ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-100'}`}
               >
@@ -69,9 +69,9 @@ const Navbar = () => {
         <div className='hidden sm:block flex-grow max-w-3xl'>
           <form onSubmit={handleSearch} className='relative'>
             <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5' />
-            <input 
-              type="text" 
-              placeholder='Search for inspiration...' 
+            <input
+              type="text"
+              placeholder='Search for inspiration...'
               className='w-full py-2.5 pl-12 pr-4 bg-gray-100 rounded-full focus:outline-none'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -83,7 +83,7 @@ const Navbar = () => {
         <div className='flex items-center gap-2 md:gap-4'>
           {session ? (
             <div className='relative' ref={dropdownRef}>
-              
+
               <button onClick={() => setDropdownOpen(!dropdownOpen)}>
                 <img
                   src={session?.user?.image || "/avatar.png"}
@@ -133,7 +133,7 @@ const Navbar = () => {
           )}
 
           {/* MOBILE MENU */}
-          <button 
+          <button
             className='p-2 sm:hidden'
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -141,6 +141,37 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+      {/* MOBILE DROPDOWN MENU */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t py-4 px-4 space-y-4 shadow-lg">
+          {/* Mobile Search */}
+          <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full py-2 pl-10 pr-4 bg-gray-100 rounded-lg focus:outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </form>
+
+          {/* Mobile Links */}
+          <div className="flex flex-col gap-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)} // Link click hone par menu band ho jaye
+                className={`px-4 py-3 rounded-lg text-base font-semibold ${pathname === link.href ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

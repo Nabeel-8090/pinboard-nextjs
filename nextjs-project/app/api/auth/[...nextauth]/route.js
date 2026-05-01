@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/libs/prisma";
 import bcrypt from "bcrypt";
 
-const authOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -25,11 +25,15 @@ const authOptions = {
       },
 
       async authorize(credentials) {
+        if (!credentials?.username || !credentials?.password) {
+          return null;
+        }
+
         const user = await prisma.user.findFirst({
           where: { username: credentials.username },
         });
 
-        if (!user) return null;
+        if (!user || !user.password) return null;
 
         const isPasswordMatched = await bcrypt.compare(
           credentials.password,
@@ -52,14 +56,16 @@ const authOptions = {
     signIn: "/signin",
   },
 
+  session: {
+    strategy: "jwt",
+  },
+
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
     async jwt({ token, user, account }) {
-      // On initial sign-in, user object is available
       if (user && account) {
         if (account.provider === "google" || account.provider === "github") {
-          // Upsert the OAuth user into PostgreSQL so we have a real DB id
           const dbUser = await prisma.user.upsert({
             where: { email: user.email },
             update: {
@@ -74,7 +80,6 @@ const authOptions = {
           });
           token.id = dbUser.id;
         } else {
-          // Credentials — id is already the PostgreSQL UUID
           token.id = user.id;
         }
         token.name = user.name;

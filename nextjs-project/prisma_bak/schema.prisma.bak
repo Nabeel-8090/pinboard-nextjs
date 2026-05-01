@@ -1,3 +1,6 @@
+// This is Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,9 +16,13 @@ model User {
   email     String?  @unique
   image     String?
   password  String?
+
+  pins      Pin[]
+  likes     Like[]
+  comments  Comment[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  pins      Pin[]
 }
 
 model Pin {
@@ -33,19 +40,27 @@ model Pin {
 }
 
 model Like {
-  id        String   @id @default(uuid())
-  userId    String
-  pinId     String
-  pin       Pin      @relation(fields: [pinId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+
+  userId String
+  pinId  String
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pin    Pin  @relation(fields: [pinId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
 }
 
 model Comment {
-  id           String   @id @default(uuid())
-  userId       String
-  profileImage String?
-  comment      String
-  commentedOn  DateTime @default(now())
-  pinId        String
-  pin          Pin      @relation(fields: [pinId], references: [id], onDelete: Cascade)
+  id      String @id @default(uuid())
+
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  comment String
+
+  pinId   String
+  pin     Pin    @relation(fields: [pinId], references: [id], onDelete: Cascade)
+
+  commentedOn DateTime @default(now())
 }

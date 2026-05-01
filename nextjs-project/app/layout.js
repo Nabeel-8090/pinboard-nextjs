@@ -1,10 +1,7 @@
-"use client";
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
 import Providers from "./providers";
-import { usePathname } from "next/navigation";
+import NavbarWrapper from "./components/NavbarWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,11 +13,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "PinBoard",
+  description: "A visual content sharing app for discovering and saving ideas",
+};
+
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-
-  const hideNavbar = pathname === "/signin" || pathname === "/register" || pathname === "/signup";
-
   return (
     <html
       lang="en"
@@ -28,13 +26,12 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-screen flex flex-col bg-gray-50">
         <Providers>
-
-          {!hideNavbar && <Navbar />}
+          {/* NavbarWrapper is a client component that handles hiding on auth pages */}
+          <NavbarWrapper />
 
           <main className="flex-1">
             {children}
           </main>
-
         </Providers>
       </body>
     </html>

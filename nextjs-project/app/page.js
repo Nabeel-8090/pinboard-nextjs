@@ -75,7 +75,7 @@ function HomeContent() {
                   )}
                   {item.user && (
                     <p className="text-gray-200 text-xs truncate drop-shadow-lg">
-                      by {item.user}
+                      by {item.user?.username || "Unknown"}
                     </p>
                   )}
                 </div>
