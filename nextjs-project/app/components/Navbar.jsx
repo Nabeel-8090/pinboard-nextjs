@@ -42,7 +42,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className='sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm shadow-sm px-4 md:px-8 py-2'>
+    <nav className='sticky top-0 z-50 w-full bg-[#f0f7ff]/95 backdrop-blur-sm border-b border-blue-100 shadow-sm px-4 md:px-8 py-2'>
       <div className='flex items-center justify-between container mx-auto gap-4'>
 
         {/* LEFT */}
@@ -57,7 +57,7 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
-                  ${pathname === link.href ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-100'}`}
+                  ${pathname === link.href ? 'bg-blue-600 text-white shadow-md shadow-blue-200' : 'text-blue-900 hover:bg-blue-100'}`}
               >
                 {link.name}
               </Link>
@@ -72,7 +72,7 @@ const Navbar = () => {
             <input
               type="text"
               placeholder='Search for inspiration...'
-              className='w-full py-2.5 pl-12 pr-4 bg-gray-100 rounded-full focus:outline-none'
+              className='w-full py-2.5 pl-12 pr-4 bg-white border border-blue-100 text-blue-900 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all placeholder:text-blue-300'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -163,7 +163,7 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)} // Link click hone par menu band ho jaye
-                className={`px-4 py-3 rounded-lg text-base font-semibold ${pathname === link.href ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-100'
+                className={`px-4 py-3 rounded-lg text-base font-semibold ${pathname === link.href ? 'bg-blue-600 text-white shadow-md shadow-blue-200' : 'text-blue-900 hover:bg-blue-100'
                   }`}
               >
                 {link.name}

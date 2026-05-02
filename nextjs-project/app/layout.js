@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-gray-50">
+      <body className="min-h-screen flex flex-col bg-[#f0f7ff]">
         <Providers>
           {/* NavbarWrapper is a client component that handles hiding on auth pages */}
           <NavbarWrapper />
