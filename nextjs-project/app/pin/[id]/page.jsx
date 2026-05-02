@@ -79,8 +79,10 @@ const Pin = () => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchPin();
         fetchMorePins();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchPin]);
 
     if (!pin?.image?.url) {

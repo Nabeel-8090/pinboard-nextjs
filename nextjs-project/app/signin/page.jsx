@@ -144,7 +144,7 @@ const Page = () => {
 
                 {/* Footer: Reduced margin */}
                 <p className="text-center text-xs text-gray-600 mt-5">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/signup" className="text-blue-600 font-semibold hover:underline">
                         Register
                     </Link>
