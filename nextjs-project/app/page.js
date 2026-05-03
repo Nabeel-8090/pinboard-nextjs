@@ -14,14 +14,13 @@ function HomeContent() {
 
   const categories = [
     "All",
-    "Cars",
+    "Bikes",
     "Hypercar",
     "Photography",
     "Buildings",
     "Architecture",
     "Food",
-    "Adnan shah",
-    "GIKI"
+    "Adnan shah"
   ];
 
   const searchParams = useSearchParams();
