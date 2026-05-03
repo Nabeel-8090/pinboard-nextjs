@@ -14,6 +14,13 @@ export async function POST(request) {
     return NextResponse.json({ error: "No file received." }, { status: 400 });
   }
 
+  if (!username || !email || !password) {
+    return NextResponse.json(
+      { error: "Username, email, and password are required." },
+      { status: 400 }
+    );
+  }
+
   try {
     const arrayBuffer = await image.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
@@ -41,19 +48,27 @@ export async function POST(request) {
       },
     });
 
+    const { password: _, ...safeUser } = user;
+
     return NextResponse.json(
       {
         success: true,
         message: "User registered",
-        user,
+        user: safeUser,
       },
       { status: 201 }
     );
   } catch (error) {
+    if (error.code === "P2002") {
+      return NextResponse.json(
+        { error: "Email already registered." },
+        { status: 409 }
+      );
+    }
     console.error("User registration failed:", error);
     return NextResponse.json(
       { error: "User registration failed" },
       { status: 500 }
     );
   }
-}
+}

@@ -1,8 +1,7 @@
 "use client";
 
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import React, { useState, useRef } from "react";
 
@@ -80,7 +79,6 @@ const UploadPin = () => {
 
   return (
     <div className="min-h-screen bg-[#f0f7ff] py-12 px-4 sm:px-6">
-      <ToastContainer position="bottom-right" theme="colored" />
 
       <div className="max-w-4xl mx-auto bg-white rounded-[2rem] shadow-2xl shadow-blue-100 overflow-hidden border border-blue-50">
         <div className="flex flex-col md:flex-row">
