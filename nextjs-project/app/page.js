@@ -20,7 +20,7 @@ function HomeContent() {
     "Buildings",
     "Architecture",
     "Food",
-    "Adnan shah"
+    "Adnan Shah"
   ];
 
   const searchParams = useSearchParams();
