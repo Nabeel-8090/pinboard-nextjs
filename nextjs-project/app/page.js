@@ -17,7 +17,7 @@ function HomeContent() {
     "Bikes",
     "Hypercar",
     "Photography",
-    "Buildings",
+    "Building",
     "Architecture",
     "Food",
     "Adnan Shah"
