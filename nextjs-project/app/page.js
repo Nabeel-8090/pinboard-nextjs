@@ -20,7 +20,11 @@ function HomeContent() {
     "Building",
     "Architecture",
     "Food",
-    "Adnan Shah"
+    "Adnan Shah",
+    "4x4",
+    "Rolls Royce",
+    "Cafe",
+    "Calligraphy"
   ];
 
   const searchParams = useSearchParams();
