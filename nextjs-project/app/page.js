@@ -15,7 +15,7 @@ function HomeContent() {
   const categories = [
     "All",
     "Bikes",
-    "Hypercar",
+    "Cars",
     "Photography",
     "Building",
     "Architecture",
