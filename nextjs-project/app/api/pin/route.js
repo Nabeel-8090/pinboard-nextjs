@@ -105,6 +105,7 @@ export const POST = async (req) => {
 export const GET = async (req) => {
   try {
     const search = req.nextUrl.searchParams.get("search");
+    const sort = req.nextUrl.searchParams.get("sort");
 
     let pins;
 
@@ -117,13 +118,17 @@ export const GET = async (req) => {
           ],
         },
         include: PIN_INCLUDE,
-        orderBy: { createdAt: "desc" },
+        orderBy: sort === "likes" 
+          ? { likes: { _count: "desc" } } 
+          : { createdAt: "desc" },
       });
 
       const searchRegex = new RegExp(search, "i");
       const allPins = await prisma.pin.findMany({
         include: PIN_INCLUDE,
-        orderBy: { createdAt: "desc" },
+        orderBy: sort === "likes" 
+          ? { likes: { _count: "desc" } } 
+          : { createdAt: "desc" },
       });
       const tagMatched = allPins.filter(
         (p) =>
@@ -131,11 +136,18 @@ export const GET = async (req) => {
           !pins.find((existing) => existing.id === p.id)
       );
       pins = [...pins, ...tagMatched];
-      pins.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      if (sort === "likes") {
+        pins.sort((a, b) => b.likes.length - a.likes.length);
+      } else {
+        pins.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
     } else {
       pins = await prisma.pin.findMany({
         include: PIN_INCLUDE,
-        orderBy: { createdAt: "desc" },
+        orderBy: sort === "likes" 
+          ? { likes: { _count: "desc" } } 
+          : { createdAt: "desc" },
       });
     }
 

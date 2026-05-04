@@ -2,14 +2,16 @@
 
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Search, X, Plus, LogOut, User } from 'lucide-react';
+import { Menu, Search, X, Plus, LogOut, User, Heart } from 'lucide-react';
 
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const sort = searchParams.get('sort');
 
   const [query, setQuery] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -81,14 +83,26 @@ const Navbar = () => {
 
         {/* RIGHT */}
         <div className='flex items-center gap-2 md:gap-4'>
+          {/* Most Liked Button */}
+          <Link
+            href={pathname === '/' && sort === 'likes' ? '/' : '/?sort=likes'}
+            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300
+              ${sort === 'likes' 
+                ? 'bg-red-500 text-white shadow-md shadow-red-200 scale-105' 
+                : 'text-gray-600 hover:bg-red-50 hover:text-red-500 border border-transparent hover:border-red-100'}`}
+          >
+            <Heart size={18} className={sort === 'likes' ? 'fill-white' : ''} />
+            <span>Most Liked</span>
+          </Link>
+
           {session ? (
             <div className='relative' ref={dropdownRef}>
 
-              <button onClick={() => setDropdownOpen(!dropdownOpen)}>
+              <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center">
                 <img
                   src={session?.user?.image || "/avatar.png"}
                   alt="Profile"
-                  className='w-10 h-10 rounded-full object-cover'
+                  className='w-10 h-10 rounded-full object-cover border-2 border-transparent hover:border-blue-400 transition-all'
                 />
               </button>
 
@@ -158,6 +172,16 @@ const Navbar = () => {
 
           {/* Mobile Links */}
           <div className="flex flex-col gap-2">
+            <Link
+              href={pathname === '/' && sort === 'likes' ? '/' : '/?sort=likes'}
+              onClick={() => setIsMenuOpen(false)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-semibold transition-all
+                ${sort === 'likes' ? 'bg-red-500 text-white shadow-md' : 'text-blue-900 hover:bg-red-50'}`}
+            >
+              <Heart size={20} className={sort === 'likes' ? 'fill-white' : 'text-red-500'} />
+              Most Liked
+            </Link>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}

@@ -35,13 +35,19 @@ function HomeContent() {
 
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
+  const sort = searchParams.get("sort");
 
   const getPins = async () => {
     setLoading(true);
     try {
-      const url = search
-        ? `/api/pin?search=${search}`
-        : `/api/pin`;
+      let url = `/api/pin`;
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      if (sort) params.append("sort", sort);
+      
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
 
       const response = await axios.get(url);
 
@@ -55,7 +61,7 @@ function HomeContent() {
 
   useEffect(() => {
     getPins();
-  }, [search, session]);
+  }, [search, sort, session]);
 
   const filteredPins = activeCategory === "All"
     ? pins
