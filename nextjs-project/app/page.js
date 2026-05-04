@@ -16,6 +16,7 @@ function HomeContent() {
     "All",
     "Bikes",
     "Cars",
+    "Hypercars",
     "Photography",
     "Building",
     "Architecture",
@@ -24,8 +25,13 @@ function HomeContent() {
     "4x4",
     "Rolls Royce",
     "Cafe",
-    "Calligraphy"
-  ];
+    "Paintings",
+    "Calligraphy",
+    "Nature",
+    "Planes",
+    "Jets",
+    "Yachts",
+    "Boats"];
 
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
