@@ -37,8 +37,16 @@ const SignUp = () => {
     };
 
     const handleUserRegister = async () => {
+        // 1. Basic empty check
         if (!username || !email || !password || !image) {
             toast.error("Please provide all required details");
+            return;
+        }
+
+        // 2. Email Format Check (Regex)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error("Please enter a valid email address");
             return;
         }
 
@@ -61,16 +69,10 @@ const SignUp = () => {
     };
 
     return (
-        /* IMPROVEMENTS:
-           1. Reduced py-12 to py-6 to save 48px of vertical space.
-           2. Added overflow-y-auto to the parent so it's scrollable if the screen is tiny.
-        */
         <div className="min-h-screen w-full flex flex-col justify-center items-center bg-gray-100 py-6 px-4 overflow-y-auto">
-            
-            {/* Added max-h-fit to ensure the card doesn't stretch unnecessarily */}
+
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-sm w-full my-auto">
 
-                {/* Logo: Reduced mb-2 and set a fixed max-height to save space */}
                 <div className="flex justify-center mb-1">
                     <img
                         src="/logoo.jpg"
@@ -79,13 +81,13 @@ const SignUp = () => {
                     />
                 </div>
 
-                {/* Header: Reduced mb-8 to mb-4 */}
+                {/* Header */}
                 <div className="text-center mb-5">
                     <h2 className="text-xl font-bold text-gray-800">Welcome to PinBoard</h2>
                     <p className="text-gray-500 text-xs">Find new ideas to try</p>
                 </div>
 
-                {/* Inputs: Reduced space-y-4 to space-y-3 */}
+                {/* Inputs */}
                 <div className="space-y-3">
                     <input
                         type="text"
@@ -111,7 +113,7 @@ const SignUp = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    {/* Avatar Upload: Tightened padding */}
+                    {/* Avatar Upload */}
                     <div className="flex items-center space-x-3 py-1">
                         <div className="relative w-10 h-10 flex-shrink-0">
                             <img
@@ -121,9 +123,8 @@ const SignUp = () => {
                             />
                         </div>
 
-                        <label className={`flex-1 text-center text-xs font-medium text-white px-3 py-2 rounded-lg cursor-pointer transition-colors ${
-                            imagePreview ? "bg-green-600 hover:bg-green-700" : "bg-gray-700 hover:bg-gray-800"
-                        }`}>
+                        <label className={`flex-1 text-center text-xs font-medium text-white px-3 py-2 rounded-lg cursor-pointer transition-colors ${imagePreview ? "bg-green-600 hover:bg-green-700" : "bg-gray-700 hover:bg-gray-800"
+                            }`}>
                             {imagePreview ? "Selected" : "Choose Avatar"}
                             <input type="file" className="hidden" onChange={handleImage} accept="image/*" />
                         </label>
@@ -139,14 +140,14 @@ const SignUp = () => {
                     </button>
                 </div>
 
-                {/* Divider: Reduced vertical margin from my-6 to my-4 */}
+                {/* Divider */}
                 <div className="flex items-center my-4">
                     <div className="flex-grow h-px bg-gray-200"></div>
                     <span className="px-3 text-gray-400 text-[10px] font-bold">OR</span>
                     <div className="flex-grow h-px bg-gray-200"></div>
                 </div>
 
-                {/* Social Buttons: Tightened padding and text */}
+                {/* Social Buttons */}
                 <div className="space-y-2">
                     <button
                         onClick={() => signIn("github", { callbackUrl: "/" })}
@@ -165,7 +166,7 @@ const SignUp = () => {
                     </button>
                 </div>
 
-                {/* Login link: Reduced mt-8 to mt-4 */}
+                {/* Login link */}
                 <p className="text-center text-xs text-gray-600 mt-5">
                     Already have an account?{" "}
                     <Link href="/signin" className="text-blue-600 font-semibold hover:underline">
