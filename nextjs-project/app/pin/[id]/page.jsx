@@ -148,7 +148,7 @@ const Pin = () => {
                     <div className='lg:w-1/2 p-8 lg:p-12 flex flex-col h-full'>
 
                         {/* Action Bar */}
-                        <div className='flex justify-between items-center mb-8'>
+                        <div className='flex flex-wrap justify-between items-center gap-4 mb-8'>
                             <div className='flex items-center gap-4'>
                                 <button
                                     onClick={handleLikePin}
