@@ -1,0 +1,14 @@
+name: E2E Test (Cypress)
+
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: cd nextjs-project && npm install
+      - name: Cypress run
+        run: cd nextjs-project && npx cypress run --browser chrome
