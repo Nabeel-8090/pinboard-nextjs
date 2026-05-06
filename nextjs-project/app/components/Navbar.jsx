@@ -87,8 +87,8 @@ const Navbar = () => {
           <Link
             href={pathname === '/' && sort === 'likes' ? '/' : '/?sort=likes'}
             className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300
-              ${sort === 'likes' 
-                ? 'bg-red-500 text-white shadow-md shadow-red-200 scale-105' 
+              ${sort === 'likes'
+                ? 'bg-red-500 text-white shadow-md shadow-red-200 scale-105'
                 : 'text-gray-600 hover:bg-red-50 hover:text-red-500 border border-transparent hover:border-red-100'}`}
           >
             <Heart size={18} className={sort === 'likes' ? 'fill-white' : ''} />

@@ -27,11 +27,11 @@ const mapPin = (pin) => ({
   likes: pin.likes ? pin.likes.map((l) => ({ userId: l.userId })) : [],
   comments: pin.comments
     ? pin.comments.map((c) => ({
-        id: c.id,
-        comment: c.comment,
-        commentedOn: c.commentedOn,
-        user: c.user ?? null,
-      }))
+      id: c.id,
+      comment: c.comment,
+      commentedOn: c.commentedOn,
+      user: c.user ?? null,
+    }))
     : [],
   createdAt: pin.createdAt,
   updatedAt: pin.updatedAt,
@@ -118,16 +118,16 @@ export const GET = async (req) => {
           ],
         },
         include: PIN_INCLUDE,
-        orderBy: sort === "likes" 
-          ? { likes: { _count: "desc" } } 
+        orderBy: sort === "likes"
+          ? { likes: { _count: "desc" } }
           : { createdAt: "desc" },
       });
 
       const searchRegex = new RegExp(search, "i");
       const allPins = await prisma.pin.findMany({
         include: PIN_INCLUDE,
-        orderBy: sort === "likes" 
-          ? { likes: { _count: "desc" } } 
+        orderBy: sort === "likes"
+          ? { likes: { _count: "desc" } }
           : { createdAt: "desc" },
       });
       const tagMatched = allPins.filter(
@@ -136,7 +136,7 @@ export const GET = async (req) => {
           !pins.find((existing) => existing.id === p.id)
       );
       pins = [...pins, ...tagMatched];
-      
+
       if (sort === "likes") {
         pins.sort((a, b) => b.likes.length - a.likes.length);
       } else {
@@ -145,8 +145,8 @@ export const GET = async (req) => {
     } else {
       pins = await prisma.pin.findMany({
         include: PIN_INCLUDE,
-        orderBy: sort === "likes" 
-          ? { likes: { _count: "desc" } } 
+        orderBy: sort === "likes"
+          ? { likes: { _count: "desc" } }
           : { createdAt: "desc" },
       });
     }

@@ -44,7 +44,7 @@ function HomeContent() {
       const params = new URLSearchParams();
       if (search) params.append("search", search);
       if (sort) params.append("sort", sort);
-      
+
       if (params.toString()) {
         url += `?${params.toString()}`;
       }
