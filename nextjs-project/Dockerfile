@@ -10,8 +10,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN DATABASE_URL="postgresql://neondb_owner:npg_iETuKPpW2we8@ep-old-snow-amakjyup-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npx prisma generate
-RUN DATABASE_URL="postgresql://neondb_owner:npg_iETuKPpW2we8@ep-old-snow-amakjyup-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npm run build
+RUN DATABASE_URL="postgresql://neondb_owner:npg_iETuKPpW2we8@ep-old-snow-amakjyup-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npx prisma generate && DATABASE_URL="postgresql://neondb_owner:npg_iETuKPpW2we8@ep-old-snow-amakjyup-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npm run build
 
 FROM base AS runner
 WORKDIR /app
