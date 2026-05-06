@@ -1,0 +1,11 @@
+name: Security Scan
+
+on: [push]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run NPM Audit
+        run: cd nextjs-project && npm audit
