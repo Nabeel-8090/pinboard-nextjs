@@ -1,0 +1,81 @@
+name: Full CI/CD Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  smoke-test:
+    name: 1. Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install & Test
+        run: |
+          cd nextjs-project
+          npm install
+          npx jest testfile.test.js
+
+  unit-test:
+    name: 2. Unit Test
+    needs: smoke-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Tests
+        run: |
+          cd nextjs-project
+          npm install
+          npm test
+
+  lint:
+    name: 3. Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Lint
+        run: |
+          cd nextjs-project
+          npm install
+          npm run lint
+
+  security:
+    name: 4. Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Audit
+        run: cd nextjs-project && npm audit
+
+  build:
+    name: 5. Build Check
+    needs: [smoke-test, unit-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Build
+        run: |
+          cd nextjs-project
+          npm install
+          npm run build
+
+  cypress:
+    name: 6. E2E Test (Cypress)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cypress run
+        run: |
+          cd nextjs-project
+          npm install
+          npx cypress run --browser chrome
