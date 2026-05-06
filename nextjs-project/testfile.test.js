@@ -1,40 +1,43 @@
-// Simple test file to verify the application environment
-// This can be expanded with real unit or integration tests
+// tests/basic.test.js
 
-describe('Basic Application Tests', () => {
-  test('Environmental variables are loaded', () => {
-    // In a real test, you'd check if specific config exists
-    const appUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    console.log(`Testing against: ${appUrl}`);
-    expect(appUrl).toBeDefined();
+const fs = require('fs');
+const path = require('path');
+
+describe('Pinboard Application Tests', () => {
+
+  // 🌐 ENVIRONMENT CHECKS
+  test('NEXTAUTH_URL is defined', () => {
+    expect(process.env.NEXTAUTH_URL).toBeDefined();
   });
 
-  test('Project structure is valid', () => {
-    expect(true).toBe(true);
+  test('DATABASE_URL is defined and valid', () => {
+    const dbUrl = process.env.DATABASE_URL;
+    expect(dbUrl).toBeDefined();
+    expect(dbUrl.startsWith('postgres')).toBe(true);
   });
 
-  test('Database configuration exists', () => {
-    // Basic check for existence of database string format
-    const dbUrl = process.env.DATABASE_URL || 'postgresql://dummy';
-    expect(dbUrl).toContain('postgresql://');
+  test('Authentication secret is strong', () => {
+    const secret = process.env.NEXTAUTH_SECRET;
+    expect(secret).toBeDefined();
+    expect(secret.length).toBeGreaterThan(10);
   });
 
-  test('Authentication secret is configured', () => {
-    const authSecret = process.env.NEXTAUTH_SECRET || 'dummy-secret';
-    expect(authSecret.length).toBeGreaterThan(5);
+  test('Cloudinary config exists', () => {
+    expect(process.env.CLOUDINARY_CLOUD_NAME).toBeDefined();
   });
 
-  test('Public assets directory is accessible', () => {
-    const fs = require('fs');
-    const path = require('path');
-    const publicPath = path.join(__dirname, 'public');
-    // We check if the folder exists or at least the path is valid
-    expect(publicPath).toBeDefined();
+  // 📁 FILE STRUCTURE CHECK
+  test('Public folder exists', () => {
+    const publicPath = path.join(process.cwd(), 'public');
+    expect(fs.existsSync(publicPath)).toBe(true);
   });
 
-  test('Cloudinary config is present', () => {
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'dkti8bh88';
-    expect(cloudName).toBeDefined();
-    expect(typeof cloudName).toBe('string');
+  // 🚀 BASIC APP CHECK (VERY IMPORTANT)
+  test('App is reachable', async () => {
+    const url = process.env.NEXTAUTH_URL;
+
+    const res = await fetch(url);
+    expect(res.status).toBe(200);
   });
+
 });
