@@ -22,6 +22,7 @@ function HomeContent() {
     "Architecture",
     "Food",
     "Adnan Shah",
+    "Said nabi",
     "4x4",
     "Rolls Royce",
     "Cafe",
