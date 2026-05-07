@@ -1,5 +1,3 @@
-// This is Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -67,7 +65,6 @@ model Comment {
   commentedOn DateTime @default(now())
 }
 
-// Board: a named collection of pins belonging to a user
 model Board {
   id          String     @id @default(uuid())
   name        String
@@ -85,7 +82,6 @@ model Board {
   @@map("board")
 }
 
-// Join table: many-to-many between Board and Pin
 model BoardPin {
   id      String @id @default(uuid())
   boardId String

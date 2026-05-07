@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-screen flex flex-col bg-[#f0f7ff]">
         <Providers>
-          {/* NavbarWrapper is a client component that handles hiding on auth pages */}
           <NavbarWrapper />
 
           <main className="flex-1">

@@ -44,7 +44,8 @@ const TITLES = {
     "Chevrolet Corvette C8", "Aston Martin DB11", "Nissan GT-R Nismo", "McLaren 720S",
     "Bugatti Chiron Sport", "Rolls-Royce Phantom", "Bentley Continental GT", "Jaguar F-Type",
     "Maserati MC20", "Lotus Emira", "Dodge Challenger Hellcat", "Toyota Supra GR",
-    "Shelby Cobra Classic", "Range Rover Autobiography", "Mercedes G-Wagon", "Cadillac Escalade-V"
+    "Shelby Cobra Classic", "Range Rover Autobiography", "Mercedes G-Wagon", "Cadillac Escalade-V",
+    "Midnight Blue Luxury Concept"
   ],
   architecture: [
     "Modern Glass Skyscraper", "Brutalist Concrete Design", "Gothic Cathedral Spire", "Minimalist Luxury Villa",

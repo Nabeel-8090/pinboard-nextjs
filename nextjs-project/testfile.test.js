@@ -1,11 +1,8 @@
-// tests/basic.test.js
-
 const fs = require('fs');
 const path = require('path');
 
 describe('Pinboard Application Tests', () => {
 
-  // 🌐 ENVIRONMENT CHECKS
   test('NEXTAUTH_URL is defined', () => {
     expect(process.env.NEXTAUTH_URL).toBeDefined();
   });
@@ -26,13 +23,11 @@ describe('Pinboard Application Tests', () => {
     expect(process.env.CLOUDINARY_CLOUD_NAME).toBeDefined();
   });
 
-  // 📁 FILE STRUCTURE CHECK
   test('Public folder exists', () => {
     const publicPath = path.join(process.cwd(), 'public');
     expect(fs.existsSync(publicPath)).toBe(true);
   });
 
-  // 🚀 BASIC APP CHECK (VERY IMPORTANT)
   test('App is reachable', async () => {
     const url = process.env.NEXTAUTH_URL;
 

@@ -111,7 +111,6 @@ const Pin = () => {
         fetchPin();
         fetchMorePins();
         fetchBoards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchPin]);
 
     if (!pin?.image?.url) {
@@ -135,7 +134,6 @@ const Pin = () => {
                 </Link>
 
                 <div className='bg-white rounded-[2.5rem] shadow-2xl shadow-blue-100/50 overflow-hidden border border-blue-50 lg:flex'>
-                    {/* Left: Image */}
                     <div className='lg:w-1/2 bg-slate-100 flex items-center justify-center p-4 lg:p-8'>
                         <img
                             src={pin.image?.url}
@@ -144,10 +142,8 @@ const Pin = () => {
                         />
                     </div>
 
-                    {/* Right: Interaction */}
                     <div className='lg:w-1/2 p-8 lg:p-12 flex flex-col h-full'>
 
-                        {/* Action Bar */}
                         <div className='flex flex-wrap justify-between items-center gap-4 mb-8'>
                             <div className='flex items-center gap-4'>
                                 <button
@@ -178,13 +174,11 @@ const Pin = () => {
                             </a>
                         </div>
 
-                        {/* Pin Content */}
                         <div className='mb-6'>
                             <h1 className='text-4xl font-black text-blue-950 mb-3 tracking-tight'>{pin.title}</h1>
                             <p className='text-slate-600 leading-relaxed'>{pin.description}</p>
                         </div>
 
-                        {/* Pin Owner */}
                         <div className='mb-6 pb-6 border-b border-blue-50'>
                             <p className='text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2'>Created by</p>
                             <Link
@@ -205,7 +199,6 @@ const Pin = () => {
                             </Link>
                         </div>
 
-                        {/* Tags */}
                         {pin.tags?.length > 0 && (
                             <div className='mb-6 flex flex-wrap gap-2'>
                                 {pin.tags.map((tag) => (
@@ -216,7 +209,6 @@ const Pin = () => {
                             </div>
                         )}
 
-                        {/* Comments Section */}
                         <div className='flex-grow flex flex-col min-h-[250px]'>
                             <h3 className='text-xl font-bold text-blue-900 mb-4 flex items-center gap-2'>
                                 Comments
@@ -242,7 +234,6 @@ const Pin = () => {
                                 )}
                             </div>
 
-                            {/* Comment Input */}
                             <div className='mt-6 pt-6 border-t border-blue-50'>
                                 <div className='relative'>
                                     <input
@@ -266,7 +257,6 @@ const Pin = () => {
                     </div>
                 </div>
 
-                {/* More to explore */}
                 {morePins.length > 0 && (
                     <div className='mt-16'>
                         <h3 className='text-2xl font-black text-blue-950 mb-8'>More to explore</h3>
@@ -289,7 +279,6 @@ const Pin = () => {
                 )}
             </div>
 
-            {/* Save to Board Modal — inside the root div, after max-w container */}
             {showBoardModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
                     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 relative">

@@ -86,7 +86,6 @@ function HomeContent() {
           </p>
         </div>
       )}
-      {/* Category Filter Strip */}
       {!loading && categories.length > 0 && (
         <div className="sticky top-16 z-40 bg-[#f0f7ff]/95 backdrop-blur-md border-b border-blue-100 py-3">
           <div className="container mx-auto px-4 flex items-center gap-3 overflow-x-auto no-scrollbar">
