@@ -40,9 +40,7 @@ jobs:
       - name: Create env files
         working-directory: nextjs-project
         run: |
-          cat > .env << ENVEOF
-          DATABASE_URL=${{ secrets.DATABASE_URL }}
-          ENVEOF
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
           cat > .env.local << ENVEOF
           GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -56,24 +54,28 @@ jobs:
           CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
           ENVEOF
 
-      - name: Build with Docker Compose
+      - name: Build Docker image
         working-directory: nextjs-project
-        run: docker compose up --build -d
+        run: docker build -t pinboard-app:latest .
 
-      - name: Wait for container to start
-        run: sleep 20
-
-      - name: Test container is running
+      - name: Test container starts
         run: |
-          docker ps
-          curl --fail http://localhost:80 && echo "App is running!" || echo "App responded"
-
-      - name: Show container logs
-        run: docker logs pinboard-app
-
-      - name: Stop test container
-        working-directory: nextjs-project
-        run: docker compose down
+          docker run -d --name test-container \
+            -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            -e NEXTAUTH_URL="http://localhost:3000" \
+            -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+            -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+            -e GITHUB_CLIENT_ID="${{ secrets.GITHUB_CLIENT_ID }}" \
+            -e GITHUB_CLIENT_SECRET="${{ secrets.GITHUB_CLIENT_SECRET }}" \
+            -e CLOUDINARY_CLOUD_NAME="${{ secrets.CLOUDINARY_CLOUD_NAME }}" \
+            -e CLOUDINARY_API_KEY="${{ secrets.CLOUDINARY_API_KEY }}" \
+            -e CLOUDINARY_API_SECRET="${{ secrets.CLOUDINARY_API_SECRET }}" \
+            -p 3000:3000 pinboard-app:latest
+          sleep 20
+          curl --fail http://localhost:3000 && echo "App is running!" || echo "App started (no health endpoint)"
+          docker logs test-container
+          docker stop test-container
 
   deploy:
     name: Deploy to AWS EC2
@@ -88,7 +90,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/pinboard-nextjs 2>/dev/null || git clone https://github.com/Nabeel-8090/pinboard-nextjs.git ~/pinboard-nextjs
+            cd ~/pinboard-nextjs/nextjs-project 2>/dev/null || (git clone https://github.com/Nabeel-8090/pinboard-nextjs.git ~/pinboard-nextjs && cd ~/pinboard-nextjs/nextjs-project)
             cd ~/pinboard-nextjs
             git pull origin main
             cd nextjs-project
@@ -107,6 +109,12 @@ jobs:
             CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
             CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
             ENVEOF
-            docker compose down || true
-            docker compose up --build -d
+            docker stop pinboard-app || true
+            docker rm pinboard-app || true
+            docker build -t pinboard-app:latest .
+            docker run -d --name pinboard-app \
+              --restart=always \
+              -p 80:3000 \
+              --env-file .env.local \
+              pinboard-app:latest
             docker ps
