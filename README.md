@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/PinBoard-Visual%20Pin%20Sharing-E60023?style=for-the-badge&logo=pinterest&logoColor=white" alt="PinBoard" />
 
-# 📌 PinBoard — Visual Pin Sharing Platform
+# PinBoard — A Visual Content Sharing Platform
 
 **A full-stack Pinterest-inspired app where you can upload, organize, and discover image content.**
 
