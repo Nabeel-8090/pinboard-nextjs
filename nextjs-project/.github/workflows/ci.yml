@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 jobs:
+<<<<<<< HEAD
   test:
     name: Install & Lint Check
     runs-on: ubuntu-latest
@@ -29,10 +30,40 @@ jobs:
         working-directory: nextjs-project
         run: npm run lint || true
 
+=======
+  # JOB 1 — Run automated tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests
+        run: npm test -- --passWithNoTests --forceExit
+        env:
+          DATABASE_URL: "postgresql://user:pass@localhost:5432/testdb"
+          NEXTAUTH_SECRET: "test-secret-for-ci"
+          NEXTAUTH_URL: "http://localhost:3000"
+
+  # JOB 2 — Build Docker image & health-check it
+  # Runs only if the test job passes
+>>>>>>> 9a8c591 (Add ci.yml)
   build-docker:
     name: Build & Test Docker Image
     runs-on: ubuntu-latest
     needs: test
+<<<<<<< HEAD
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -118,3 +149,35 @@ jobs:
               --env-file .env.local \
               pinboard-app:latest
             docker ps
+=======
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t pinboard:v1 .
+
+      - name: Run container
+        run: |
+          docker run -d \
+            --name pinboard-test \
+            -p 3000:3000 \
+            -e DATABASE_URL="postgresql://user:pass@localhost:5432/testdb" \
+            -e NEXTAUTH_SECRET="test-secret-for-ci" \
+            -e NEXTAUTH_URL="http://localhost:3000" \
+            pinboard:v1
+
+      - name: Wait for app to start
+        run: sleep 20
+
+      - name: Health check
+        run: |
+          curl --fail --retry 5 --retry-delay 5 \
+            http://localhost:3000/api/health || \
+          (echo "Health check failed — container logs:" && docker logs pinboard-test && exit 1)
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f pinboard-test
+>>>>>>> 9a8c591 (Add ci.yml)
