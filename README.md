@@ -34,11 +34,11 @@
 
 | Home Feed | Pin Detail | Profile |
 |-----------|------------|---------|
-| ![Home](./screenshots/home.jpg) | ![Pin](./screenshots/pin-detail.png) | ![Board](./screenshots/profile.png) |
+| ![Home](./nextjs-project/screenshots/home.jpg) | ![Pin](./nextjs-project/screenshots/pin-detail.png) | ![Board](./nextjs-project/screenshots/profile.png) |
 
 | Login Page | Create Pin | Boards |
 |------------|------------|--------|
-| ![Login](./screenshots/login.png) | ![Create](./screenshots/create-pin.png) | ![Board](./screenshots/board.png) |
+| ![Login](./nextjs-project/screenshots/login.png) | ![Create](./nextjs-project/screenshots/create-pin.png) | ![Board](./nextjs-project/screenshots/board.png) |
 
 ---
 
