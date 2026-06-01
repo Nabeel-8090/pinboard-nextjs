@@ -1,7 +1,12 @@
 # dependencies
 node_modules/
+
+# Next.js build
 .next/
 out/
+
+# Vercel
+.vercel/
 
 # env files - NEVER commit these
 .env
@@ -10,5 +15,16 @@ out/
 
 # misc
 .DS_Store
-*.pem
+Thumbs.db
+
+# logs
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+tsconfig.tsbuildinfo
+
+# coverage (optional)
+coverage/
+*.lcov
