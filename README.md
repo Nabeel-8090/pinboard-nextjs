@@ -1,8 +1,8 @@
 <div align="center">
 
-# 📌 PinBoard
+# PinBoard
 
-**A Pinterest-inspired visual content sharing platform.**
+**Full-Stack Visual Pin Sharing Platform**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-pinboard--nextjs.vercel.app-black?style=flat-square)](https://pinboard-nextjs.vercel.app)
 [![GitHub](https://img.shields.io/badge/GitHub-Source%20Code-181717?style=flat-square&logo=github)](https://github.com/Nabeel-8090/pinboard-nextjs)
@@ -16,7 +16,7 @@
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 | Home Feed | Pin Detail | Profile |
 |-----------|------------|---------|
@@ -28,7 +28,7 @@
 
 ---
 
-## ✨ Features
+## Features
 
 - Upload and share image pins with title, description, and category
 - Organize pins into named boards
@@ -39,7 +39,7 @@
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -52,7 +52,21 @@
 
 ---
 
-## 🚀 Getting Started
+## REST API Endpoints
+
+The backend follows RESTful architecture using Next.js Route Handlers:
+
+- `GET /api/pins` → Fetch all pins  
+- `POST /api/pins` → Create a new pin  
+- `GET /api/pins/[id]` → Get single pin details  
+- `POST /api/pins/[id]/like` → Like a pin  
+- `POST /api/pins/[id]/comment` → Add a comment to a pin  
+- `POST /api/boards` → Create a new board  
+- `POST /api/boards/[id]/pins` → Add a pin to a board  
+
+---
+
+## Getting Started
 
 ```bash
 git clone https://github.com/Nabeel-8090/pinboard-nextjs.git
@@ -83,7 +97,7 @@ CLOUDINARY_API_SECRET=
 
 ---
 
-## 👨‍💻 Team
+## Team
 
 Built as a DBMS course project by:
 
