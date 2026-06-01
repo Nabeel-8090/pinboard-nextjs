@@ -14,6 +14,28 @@
 
 </div>
 
+## 📸 Screenshots
+
+
+
+| Home Feed | Pin Detail | Profile |
+
+|-----------|------------|---------|
+
+| ![Home](./nextjs-project/screenshots/home.jpg) | ![Pin](./nextjs-project/screenshots/pin-detail.png) | ![Board](./nextjs-project/screenshots/profile.png) |
+
+
+
+| Login Page | Create Pin | Boards |
+
+|------------|------------|--------|
+
+| ![Login](./nextjs-project/screenshots/login.png) | ![Create](./nextjs-project/screenshots/create-pin.png) | ![Board](./nextjs-project/screenshots/board.png) |
+
+
+
+---
+
 ---
 
 ## ✨ Features
